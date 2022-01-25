@@ -1,10 +1,10 @@
 import Busboy from 'busboy';
 import fs from 'fs';
+import { logger } from './logger.js';
 import { pipeline } from 'stream/promises';
-import { logger } from './logger';
 
 export default class UploadHandler {
-    constructor({ io, socketId, downloadsFolder, messageTimeDelay = 2000 }) {
+    constructor({ io, socketId, downloadsFolder, messageTimeDelay = 200 }) {
         this.io = io;
         this.socketId = socketId;
         this.downloadsFolder = downloadsFolder;
@@ -27,7 +27,7 @@ export default class UploadHandler {
 
                 processedAlready += chunk.length;
 
-                if(!this.canExecute(this.lastMessageSent)) {
+                if (!this.canExecute(this.lastMessageSent)) {
                     continue;
                 }
 
@@ -45,7 +45,7 @@ export default class UploadHandler {
 
         await pipeline(
             file,
-            this.handleFileBytes.apply(this, [ filename ]),
+            this.handleFileBytes.apply(this, [filename]),
             fs.createWriteStream(saveTo),
         );
 

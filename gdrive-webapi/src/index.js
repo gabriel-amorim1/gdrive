@@ -1,8 +1,8 @@
-import https from 'https';
-import fs from 'fs';
-import { logger } from './logger.js';
-import { Server } from 'socket.io';
 import { Routes } from './routes.js';
+import { Server } from 'socket.io';
+import fs from 'fs';
+import https from 'https';
+import { logger } from './logger.js';
 
 const PORT = process.env.PORT || 3000;
 
