@@ -1,9 +1,10 @@
 import { dirname, resolve } from 'path';
-import { pipeline } from 'stream/promises';
 import { fileURLToPath, parse } from 'url';
+
 import FileHelper from './fileHelper.js';
-import { logger } from './logger.js';
 import UploadHandler from './uploadHandler.js';
+import { logger } from './logger.js';
+import { pipeline } from 'stream/promises';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const defaultDownloadsFolder = resolve(__dirname, '../', 'downloads');
@@ -14,6 +15,7 @@ class Routes {
     constructor(downloadsFolder = defaultDownloadsFolder) {
         this.downloadsFolder = downloadsFolder;
         this.fileHelper = FileHelper;
+        this.io = {};
     }
 
     setSocketInstance(io) {
@@ -44,8 +46,8 @@ class Routes {
             response.writeHead(200);
             const data = JSON.stringify({ result: 'Files uploaded with success!' });
             response.end(data);
-        } 
-        
+        };
+
         const busboyInstance = uploadHandler.registerEvents(headers, onFinish(response));
 
         await pipeline(
